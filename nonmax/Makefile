@@ -7,8 +7,8 @@
 # Add source files here
 EXECUTABLE	:= nonmax
 # Cuda source files (compiled with cudacc)
-#CUFILES   := nonmaxmain.cu nonmax.cu 
-CUFILES   := nonmax.cu 
+CUFILES   := nonmaxmain.cu nonmax.cu 
+#CUFILES   := nonmax.cu 
 # C/C++ source files (compiled with gcc / c++)
 CCFILES		:= 
 LINKCCFILES := 

@@ -7,8 +7,8 @@
 # Add source files here
 EXECUTABLE	:= combine
 # Cuda source files (compiled with cudacc)
-#CUFILES   := combine.cu combinemain.cu
-CUFILES   := combine.cu
+CUFILES   := combine.cu combinemain.cu
+#CUFILES   := combine.cu
 # C/C++ source files (compiled with gcc / c++)
 CCFILES		:= 
 LINKCCFILES := Stencil.cpp

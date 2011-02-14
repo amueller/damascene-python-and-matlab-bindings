@@ -7,8 +7,8 @@
 # Add source files here
 EXECUTABLE	:= skeleton
 # CUDA source files (compiled with cudacc)
-#CUFILES		:= postprocessmain.cu skeleton.cu
-CUFILES		:= skeleton.cu
+CUFILES		:= postprocessmain.cu skeleton.cu
+#CUFILES		:= skeleton.cu
 
 
 ################################################################################

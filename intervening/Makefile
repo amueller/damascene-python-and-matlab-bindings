@@ -7,8 +7,8 @@
 # Add source files here
 EXECUTABLE	:= intervene
 # Cuda source files (compiled with cudacc)
-#CUFILES   := intervening.cu interveningmain.cu
-CUFILES   := intervening.cu
+CUFILES   := intervening.cu interveningmain.cu
+#CUFILES   := intervening.cu
 # C/C++ source files (compiled with gcc / c++)
 CCFILES		:= 
 LINKCCFILES := Stencil.cpp 
