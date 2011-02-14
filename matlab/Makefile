@@ -14,8 +14,8 @@ CUFILES := gpb.cu
 #LINKCCFILES := Stencil.cpp filters.cpp
 ################################################################################
 # Rules and targets
-
-INCLUDES +=  -I/usr/local/matlab/extern/include
+MATLABPATH=/home/VI/staff/amueller/bin/matlab
+INCLUDES +=  -I$(MATLABPATH)/extern/include
 
 include ../common.mk
 #objdir:=../obj/release/
@@ -29,5 +29,6 @@ gpb.o:
 #gpb_mex:
 	#g++ -O3 -c  -Wall -I/usr/local/matlab/extern/include -DMATLAB_MEX_FILE -pg  -DMX_COMPAT_32   "gpb_mex.c"
 gpb_all:
-	g++ -O3 -pthread -shared -m32 -Wl,--version-script,/usr/local/matlab/extern/lib/glnx86/mexFunction.map -Wl,--no-undefined -o "gpb_mex.mexglx" gpb_mex.c -lmex -Wl,-rpath-link,/usr/local/matlab/bin/glnx86 -L/usr/local/matlab/bin/glnx86 -lmat -lmx -lm -pg $(LIB) $(INCLUDES) -L../lib/ -ldamascene -lcutil 
+	g++ -O3 -pthread -shared -m32 -Wl,--version-script,$(MATLABPATH)/extern/lib/glnx86/mexFunction.map -Wl,--no-undefined -o "gpb_mex.mexglx" gpb_mex.c -lmex -Wl,-rpath-link,$(MATLABPATH)/bin/glnx86 -L$(MATLABPATH)/bin/glnx86 -lmat -lmx -lm -pg $(LIB) $(INCLUDES) -L../lib/ -ldamascene -lcutil_i386
+	#g++ -O3 -fPIC -pthread -shared -Wl,--version-script,$(MATLABPATH)/extern/lib/glnx86/mexFunction.map -Wl,--no-undefined -o "gpb_mex.mexglx" gpb_mex.c -lmex -Wl,-rpath-link,$(MATLABPATH)/bin/glnx86 -L$(MATLABPATH)/bin/glnx86 -lmat -lmx -lm -pg $(LIB) $(INCLUDES) -L../lib/ -ldamascene -lcutil 
 

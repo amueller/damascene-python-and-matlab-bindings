@@ -26,9 +26,10 @@ ROOTOBJDIR ?= $(ROOTDIR)/obj
 ROOTSODIR  ?= $(ROOTDIR)/lib
 SODIR      ?= $(ROOTSODIR)/linux
 
-ACMLDIR    ?= /home/local/lamueller/acml4.4.0/ifort32
+#ACMLDIR    ?= /home/local/lamueller/acml4.4.0/ifort32
+ACMLDIR    ?= /home/local/amueller/acml4.4.0/ifort32
 
-CUDALIBSUFFIX := lib
+CUDALIBSUFFIX := lib32
 #LIBDIR := $(CUDA_SDK_PATH)/lib
 LIBDIR := $(ROOTDIR)/lib
 COMMONDIR := $(CUDA_SDK_PATH)/common
@@ -63,8 +64,9 @@ ifeq ($(USEGLLIB),1)
 endif
 
 # Libs
-#LIB       := -L$(CUDA_INSTALL_PATH)/$(CUDALIBSUFFIX) -L$(LIBDIR) -L$(COMMONDIR)/lib -L$(ACMLDIR)/lib -lcuda -lcudart -lcublas -lblas -lacml -lacml_mv -L../stencilMatrixMultiply/lib/linux/release ${OPENGLLIB} ${LIB}
-LIB       := -L$(CUDA_INSTALL_PATH)/$(CUDALIBSUFFIX) -L$(CUDA_SDK_PATH)/lib -L$(LIBDIR) -L$(COMMONDIR)/lib -L$(ACMLDIR)/lib -lcuda -lcudart -lcublas -lblas -lacml -L../stencilMatrixMultiply/lib/linux/release ${OPENGLLIB} ${LIB} -L/usr/lib/nvidia-current/
+#LIB       := -L$(CUDA_INSTALL_PATH)/$(CUDALIBSUFFIX) -L$(LIBDIR) -L$(COMMONDIR)/lib32 -L$(ACMLDIR)/lib -lcuda -lcudart -lcublas -lblas -lacml -lacml_mv -L../stencilMatrixMultiply/lib/linux/release ${OPENGLLIB} ${LIB}
+#LIB       := -L$(CUDA_INSTALL_PATH)/$(CUDALIBSUFFIX) -L$(CUDA_SDK_PATH)/lib -L$(LIBDIR) -L$(COMMONDIR)/lib32 -L$(ACMLDIR)/lib -lcuda -lcudart -lcublas -lblas -lacml ${OPENGLLIB} -L/usr/lib32/nvidia-current/ -L/usr/lib32
+LIB       := -L$(CUDA_INSTALL_PATH)/$(CUDALIBSUFFIX) -L$(CUDA_SDK_PATH)/lib -L$(LIBDIR) -L$(COMMONDIR)/lib32 -L$(ACMLDIR)/lib -lcuda -lcudart -lcublas -lacml ${OPENGLLIB} -L/usr/lib32/nvidia-current/ -L/usr/lib32
 
 # Warning flags
 CXXWARN_FLAGS := \
