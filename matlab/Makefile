@@ -30,5 +30,4 @@ gpb.o:
 	#g++ -O3 -c  -Wall -I/usr/local/matlab/extern/include -DMATLAB_MEX_FILE -pg  -DMX_COMPAT_32   "gpb_mex.c"
 gpb_all:
 	g++ -O3 -pthread -shared -m32 -Wl,--version-script,/usr/local/matlab/extern/lib/glnx86/mexFunction.map -Wl,--no-undefined -o "gpb_mex.mexglx" gpb_mex.c -lmex -Wl,-rpath-link,/usr/local/matlab/bin/glnx86 -L/usr/local/matlab/bin/glnx86 -lmat -lmx -lm -pg $(LIB) $(INCLUDES) -L../lib/ -ldamascene -lcutil 
-	#gcc -O -pthread -shared -m32 -Wl,--version-script,/usr/local/matlab/extern/lib/glnx86/mexFunction.map -Wl,--no-undefined -o  "gpb_mex.mexglx"  gpb_mex.o  $(LIB) $(INCLUDES) -L../lib/ -Wl,-rpath-link,/usr/local/matlab/bin/glnx86 -L/usr/local/matlab/bin/glnx86 -lmx -lmex -lmat -lm -lstdc++ -ldamascene
 

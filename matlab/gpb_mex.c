@@ -8,17 +8,18 @@ void mexFunction(int nOut, mxArray *pOut[],
   int width, height;
   unsigned int *out_image;
   unsigned int *in_image;
+  mwSize* dims[3];
 
   if((nIn != 1) || (nOut != 1))
     mexErrMsgTxt("Usage: border = gpb(image)");
-if (!mxIsClass(pIn[0],"uint8") || mxGetNumberOfDimensions(pIn[0]) != 2) {
+if (!mxIsClass(pIn[0],"uint8") || mxGetNumberOfDimensions(pIn[0]) != 3) {
 		mexErrMsgTxt("Usage: th argument must be a unsigned int matrix");
 	}
   
   width = mxGetM(pIn[0]);
   height = mxGetN(pIn[0]);
-
-  pOut[0]=mxCreateNumericMatrix(width,height,mxUINT8_CLASS,mxREAL);
+  dims[0]=width; dims[1]=height; dims[2]=3; //for rgb
+  pOut[0]=mxCreateNumericMatrix(3,dims,mxUINT8_CLASS,mxREAL);
   out_image=(unsigned int*) mxGetPr(pOut[0]);
 
   in_image = (unsigned int*) mxGetData(pIn[0]);
