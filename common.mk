@@ -12,7 +12,7 @@ ifdef cuda-install
 	CUDA_INSTALL_PATH := $(cuda-install)
 endif
 
-
+STATIC_LIB := libdamascene.a
 
 CUDA_SDK_PATH ?=/usr/local/src/NVIDIA_GPU_Computing_SDK/C
 
@@ -29,7 +29,8 @@ SODIR      ?= $(ROOTSODIR)/linux
 ACMLDIR    ?= /home/local/lamueller/acml4.4.0/ifort32
 
 CUDALIBSUFFIX := lib
-LIBDIR := $(CUDA_SDK_PATH)/lib
+#LIBDIR := $(CUDA_SDK_PATH)/lib
+LIBDIR := $(ROOTDIR)/lib
 COMMONDIR := $(CUDA_SDK_PATH)/common
 
 # Compilers
@@ -42,7 +43,8 @@ LINK       := g++
 INCLUDES  += -I. -I$(CUDA_INSTALL_PATH)/include -I$(COMMONDIR)/inc -I$(ROOTDIR)/include -I$(ACMLDIR)/include -I../include
 
 # architecture flag for cubin build
-CUBIN_ARCH_FLAG := -m64
+#CUBIN_ARCH_FLAG := -m64
+CUBIN_ARCH_FLAG := -m32
 
 # OpenGL is used or not (if it is used, then it is necessary to include GLEW)
 OPENGLLIB := -lGL -lGLU
@@ -62,7 +64,7 @@ endif
 
 # Libs
 #LIB       := -L$(CUDA_INSTALL_PATH)/$(CUDALIBSUFFIX) -L$(LIBDIR) -L$(COMMONDIR)/lib -L$(ACMLDIR)/lib -lcuda -lcudart -lcublas -lblas -lacml -lacml_mv -L../stencilMatrixMultiply/lib/linux/release ${OPENGLLIB} ${LIB}
-LIB       := -L$(CUDA_INSTALL_PATH)/$(CUDALIBSUFFIX) -L$(LIBDIR) -L$(COMMONDIR)/lib -L$(ACMLDIR)/lib -lcuda -lcudart -lcublas -lblas -lacml -L../stencilMatrixMultiply/lib/linux/release ${OPENGLLIB} ${LIB} -L/usr/lib/nvidia-current/
+LIB       := -L$(CUDA_INSTALL_PATH)/$(CUDALIBSUFFIX) -L$(CUDA_SDK_PATH)/lib -L$(LIBDIR) -L$(COMMONDIR)/lib -L$(ACMLDIR)/lib -lcuda -lcudart -lcublas -lblas -lacml -L../stencilMatrixMultiply/lib/linux/release ${OPENGLLIB} ${LIB} -L/usr/lib/nvidia-current/
 
 # Warning flags
 CXXWARN_FLAGS := \
@@ -102,7 +104,7 @@ ifeq ($(dbg),1)
 	BINSUBDIR   := debug
 	LIBSUFFIX   := D
 else 
-	COMMONFLAGS += -O3 
+	COMMONFLAGS += -O3 -m32
 	BINSUBDIR   := release
 	LIBSUFFIX   :=
 	NVCCFLAGS   += --compiler-options -fno-strict-aliasing
@@ -185,7 +187,6 @@ ifeq ($(verbose), 1)
 else
 	VERBOSE := @
 endif
-
 ################################################################################
 # Check for input flags and set compiler flags appropriately
 ################################################################################

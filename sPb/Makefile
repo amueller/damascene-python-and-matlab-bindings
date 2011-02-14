@@ -7,7 +7,8 @@
 # Add source files here
 EXECUTABLE	:= sPb
 # Cuda source files (compiled with cudacc)
-CUFILES   := spbmain.cu spectralPb.cu
+#CUFILES   := spbmain.cu spectralPb.cu
+CUFILES   := spectralPb.cu
 CU_DEPS		:= #spectralPb_kernel.cu
 # C/C++ source files (compiled with gcc / c++)
 CCFILES		:= 

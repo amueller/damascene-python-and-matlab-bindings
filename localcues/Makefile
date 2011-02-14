@@ -7,7 +7,8 @@
 # Add source files here
 EXECUTABLE	:= localcues
 # Cuda source files (compiled with cudacc)
-CUFILES   := gradient.cu parabola.cu localcuesmain.cu localcues.cu rotate.cu
+#CUFILES   := gradient.cu parabola.cu localcuesmain.cu localcues.cu rotate.cu
+CUFILES   := gradient.cu parabola.cu localcues.cu rotate.cu
 # C/C++ source files (compiled with gcc / c++)
 CCFILES		:= #localcues.c
 LINKCCFILES := Stencil.cpp filters.cpp 

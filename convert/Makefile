@@ -7,7 +7,8 @@
 # Add source files here
 EXECUTABLE	:= convert
 # Cuda source files (compiled with cudacc)
-CUFILES   := convert.cu convertmain.cu
+#CUFILES   := convert.cu convertmain.cu
+CUFILES   := convert.cu
 # C/C++ source files (compiled with gcc / c++)
 CCFILES		:= 
 LINKCCFILES := Stencil.cpp

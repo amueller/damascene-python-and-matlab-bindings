@@ -7,7 +7,8 @@
 # Add source files here
 EXECUTABLE	:= lanczos
 # Cuda source files (compiled with cudacc)
-CUFILES   := lanczosmain.cu lanczos.cu #spectralPb.cu
+#CUFILES   := lanczosmain.cu lanczos.cu #spectralPb.cu
+CUFILES   := lanczos.cu #spectralPb.cu
 CU_DEPS		:= #spectralPb_kernel.cu
 # C/C++ source files (compiled with gcc / c++)
 CCFILES		:= 
