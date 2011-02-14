@@ -5,6 +5,7 @@
 ################################################################################
 
 SRCDIRS := textons combine stencilMatrixMultiply localcues noReorthog sPb intervening gPb convert nonmax damascene postprocess matlab
+#SRCDIRS := textons combine stencilMatrixMultiply localcues noReorthog sPb intervening gPb convert nonmax damascene postprocess 
 
 .PHONY: subdirs $(SRCDIRS)
 subdirs: $(SRCDIRS)

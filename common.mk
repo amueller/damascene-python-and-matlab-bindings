@@ -12,7 +12,7 @@ ifdef cuda-install
 	CUDA_INSTALL_PATH := $(cuda-install)
 endif
 
-STATIC_LIB := libdamascene.a
+#STATIC_LIB := libdamascene.a
 
 CUDA_SDK_PATH ?=/usr/local/src/NVIDIA_GPU_Computing_SDK/C
 
@@ -101,7 +101,7 @@ COMMONFLAGS += $(INCLUDES) -DUNIX
 
 # Debug/release configuration
 ifeq ($(dbg),1)
-	COMMONFLAGS += -g
+	COMMONFLAGS += -g -m32
 	NVCCFLAGS   += -D_DEBUG
 	BINSUBDIR   := debug
 	LIBSUFFIX   := D
@@ -150,7 +150,7 @@ ifeq ($(USEPARAMGL),1)
 endif
 
 # Libs
-LIB       := -L$(CUDA_INSTALL_PATH)/lib -L$(LIBDIR) -L$(COMMONDIR)/lib -lcuda -lcudart ${OPENGLLIB} $(PARAMGLLIB) ${LIB}
+LIB       := -L$(CUDA_INSTALL_PATH)/lib -L$(LIBDIR) -L$(COMMONDIR)/lib -lcuda -lcudart ${OPENGLLIB} $(PARAMGLLIB) ${LIB} -lcutil_i386
 
 
 # Lib/exe configuration
@@ -159,7 +159,7 @@ ifneq ($(STATIC_LIB),)
 	TARGET   := $(subst .a,$(LIBSUFFIX).a,$(LIBDIR)/$(STATIC_LIB))
 	LINKLINE  = ar qv $(TARGET) $(OBJS) 
 else
-	LIB += -lcutil$(LIBSUFFIX)
+	#LIB += -lcutil$(LIBSUFFIX)
 	# Device emulation configuration
 	ifeq ($(emu), 1)
 		NVCCFLAGS   += -deviceemu
@@ -177,7 +177,7 @@ else
 		TARGET    := $(TARGETDIR)/$(EXECUTABLE)
 	endif
 	ifndef NOLINK
-		LINKLINE  = $(LINK) -o $(TARGET) $(OBJS) $(LINKOBJS) $(LIB)
+		LINKLINE  = $(LINK) -m32 -o $(TARGET) $(OBJS) $(LINKOBJS) $(LIB)
 	else
 		LINKLINE  =
 	endif
