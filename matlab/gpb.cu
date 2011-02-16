@@ -1,6 +1,7 @@
 /*
  * Written by Andreas Mueller
- * 
+ * Basically copy&paste from damascene.cu
+ * Provides C interface to highlevel gPB
  *
  * Compute gPB operator using damascene with cuda
  *
@@ -32,7 +33,6 @@
 #define TEXTON32 1
 
 void gpb(const unsigned int* in_image,unsigned int width, unsigned int height, float* out_image)
-/*int main()*/
 {
 	cuInit(0);
 	cudaSetDevice(1);
@@ -164,12 +164,12 @@ void gpb(const unsigned int* in_image,unsigned int width, unsigned int height, f
 	//free(hostGPbAllConcat);
 
 
-	/*CUDA_SAFE_CALL(cudaFree(devEigenvectors));*/
-	/*CUDA_SAFE_CALL(cudaFree(devCombinedGradient));*/
-	/*CUDA_SAFE_CALL(cudaFree(devSPb));*/
-	/*CUDA_SAFE_CALL(cudaFree(devGPb));*/
-	/*CUDA_SAFE_CALL(cudaFree(devGPb_thin));*/
-	/*CUDA_SAFE_CALL(cudaFree(devGPball));*/
+	CUDA_SAFE_CALL(cudaFree(devEigenvectors));
+	CUDA_SAFE_CALL(cudaFree(devCombinedGradient));
+	CUDA_SAFE_CALL(cudaFree(devSPb));
+	CUDA_SAFE_CALL(cudaFree(devGPb));
+	CUDA_SAFE_CALL(cudaFree(devGPb_thin));
+	CUDA_SAFE_CALL(cudaFree(devGPball));
 }
 
 int main(){
