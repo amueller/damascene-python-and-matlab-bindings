@@ -24,9 +24,9 @@ ROOTOBJDIR ?= $(ROOTDIR)/obj
 ROOTSODIR  ?= $(ROOTDIR)/lib
 SODIR      ?= $(ROOTSODIR)/linux
 
-ACMLDIR    ?= /home/local/amueller/acml4.4.0/ifort64
+ACMLDIR    ?= /home/local/amueller/acml4.4.0/ifort32
 
-CUDALIBSUFFIX := lib
+CUDALIBSUFFIX := lib32
 #LIBDIR := $(CUDA_SDK_PATH)/lib
 LIBDIR := $(ROOTDIR)/lib
 COMMONDIR := $(CUDA_SDK_PATH)/common
@@ -41,8 +41,8 @@ LINK       := g++
 INCLUDES  += -I. -I$(CUDA_INSTALL_PATH)/include -I$(COMMONDIR)/inc -I$(ROOTDIR)/include -I$(ACMLDIR)/include -I../include
 
 # architecture flag for cubin build
-CUBIN_ARCH_FLAG := -m64
-#CUBIN_ARCH_FLAG := -m32
+#CUBIN_ARCH_FLAG := -m64
+CUBIN_ARCH_FLAG := -m32
 
 # OpenGL is used or not (if it is used, then it is necessary to include GLEW)
 OPENGLLIB := -lGL -lGLU
@@ -61,7 +61,7 @@ ifeq ($(USEGLLIB),1)
 endif
 
 # Libs
-LIB       := -L$(CUDA_INSTALL_PATH)/$(CUDALIBSUFFIX) -L$(CUDA_SDK_PATH)/lib -L$(LIBDIR) -L$(COMMONDIR)/lib -L$(ACMLDIR)/lib -lcuda -lcudart -lcublas -lacml_mv -lacml ${OPENGLLIB} -L/usr/lib/nvidia-current/ -L/usr/lib
+LIB       := -L$(CUDA_INSTALL_PATH)/$(CUDALIBSUFFIX) -L$(CUDA_SDK_PATH)/lib -L$(LIBDIR) -L$(COMMONDIR)/lib32 -L$(ACMLDIR)/lib -lcuda -lcudart -lcublas -lacml ${OPENGLLIB} -L/usr/lib32/nvidia-current/ -L/usr/lib32
 
 # Warning flags
 CXXWARN_FLAGS := \
@@ -96,12 +96,12 @@ COMMONFLAGS += $(INCLUDES) -DUNIX
 
 # Debug/release configuration
 ifeq ($(dbg),1)
-	COMMONFLAGS += -g
+	COMMONFLAGS += -g -m32
 	NVCCFLAGS   += -D_DEBUG
 	BINSUBDIR   := debug
 	LIBSUFFIX   := D
 else 
-	COMMONFLAGS += -O3
+	COMMONFLAGS += -O3 -m32
 	BINSUBDIR   := release
 	LIBSUFFIX   :=
 	NVCCFLAGS   += --compiler-options -fno-strict-aliasing
@@ -122,7 +122,7 @@ SMVERSIONFLAGS ?= -arch sm_12
 NVCCFLAGS += $(SMVERSIONFLAGS)
 
 # architecture flag for cubin build
-CUBIN_ARCH_FLAG :=
+CUBIN_ARCH_FLAG := -m32
 
 # OpenGL is used or not (if it is used, then it is necessary to include GLEW)
 OPENGLLIB := -lGL -lGLU
@@ -145,7 +145,7 @@ ifeq ($(USEPARAMGL),1)
 endif
 
 # Libs
-LIB       := -L$(CUDA_INSTALL_PATH)/lib -L$(LIBDIR) -L$(COMMONDIR)/lib -lcuda -lcudart ${OPENGLLIB} $(PARAMGLLIB) ${LIB} -lcutil
+LIB       := -L$(CUDA_INSTALL_PATH)/lib -L$(LIBDIR) -L$(COMMONDIR)/lib -lcuda -lcudart ${OPENGLLIB} $(PARAMGLLIB) ${LIB} -lcutil_i386
 
 
 # Lib/exe configuration
@@ -172,7 +172,7 @@ else
 		TARGET    := $(TARGETDIR)/$(EXECUTABLE)
 	endif
 	ifndef NOLINK
-		LINKLINE  = $(LINK) -o $(TARGET) $(OBJS) $(LINKOBJS) $(LIB)
+		LINKLINE  = $(LINK) -m32 -o $(TARGET) $(OBJS) $(LINKOBJS) $(LIB)
 	else
 		LINKLINE  =
 	endif

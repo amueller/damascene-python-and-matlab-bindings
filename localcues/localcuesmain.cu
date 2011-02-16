@@ -37,7 +37,7 @@ int main(int argc, char** argv)
 {
   cuInit(0);
   chooseLargestGPU(true);
-  uint total, free;
+  size_t total, free;
   cuMemGetInfo(&free, &total);
   printf("This GPU has %d bytes of memory\n", total);
   printf("This GPU has %d bytes of free memory\n", free);

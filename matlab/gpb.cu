@@ -41,7 +41,7 @@ void gpb(const unsigned int* in_image,unsigned int width, unsigned int height, f
 	/*//copy in_image to device:*/
 	uint nPixels = width * height;
 	cudaMalloc((void**)&devRgbU, nPixels*sizeof(uint));
-	unsigned int totalMemory, availableMemory;
+	size_t totalMemory, availableMemory;
 	cuMemGetInfo(&availableMemory,&totalMemory );
 	std::cout<<"Available " << availableMemory << "out of "<< totalMemory<<  " bytes on GPU" <<std::endl;
 	cudaMemcpy(devRgbU, in_image, nPixels*sizeof(uint), cudaMemcpyHostToDevice);
