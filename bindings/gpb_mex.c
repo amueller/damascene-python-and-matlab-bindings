@@ -6,12 +6,15 @@ void mexFunction(int nOut, mxArray *pOut[],
 		 int nIn, const mxArray *pIn[])
 {
   mwSize width, height;
-  float *out_image;
+  float* borders;
+  float* orientations;
+  int* textons;
   unsigned int *in_image;
   mwSize dims[3];
+  mwSize orientation_dims[3];
 
-  if((nIn != 1) || (nOut != 1))
-    mexErrMsgTxt("Usage: border = gpb(image)");
+  if((nIn != 1) || (nOut != 3))
+    mexErrMsgTxt("Usage: border,textons,orientations = gpb(image)");
 if (!mxIsClass(pIn[0],"uint8") || mxGetNumberOfDimensions(pIn[0]) != 3) {
 		mexErrMsgTxt("Usage: th argument must be a unsigned int matrix");
 	}
@@ -25,8 +28,14 @@ if (!mxIsClass(pIn[0],"uint8") || mxGetNumberOfDimensions(pIn[0]) != 3) {
   dims[0]=width; dims[1]=height; //for rgb0
   mexPrintf("width: %d height: %d\n",width, height);
   pOut[0]=mxCreateNumericMatrix(height,width,mxSINGLE_CLASS,mxREAL);
-  out_image=(float*) mxGetPr(pOut[0]);
+  pOut[1]=mxCreateNumericMatrix(height,width,mxINT32_CLASS,mxREAL);
+  orientation_dims[0]=width; orientation_dims[1]=height; orientation_dims[2]=8;
+  pOut[2]=mxCreateNumericArray(3,orientation_dims,mxSINGLE_CLASS,mxREAL);
+
+  borders=(float*) mxGetPr(pOut[0]);
+  orientations=(float*) mxGetPr(pOut[1]);
+  textons=(int*) mxGetPr(pOut[2]);
 
   in_image = (unsigned int*) mxGetData(pIn[0]);
-  gpb(in_image,height,width,out_image); 
+  gpb(in_image,height,width,borders,textons,orientations); 
 }

@@ -32,7 +32,15 @@
 #define TEXTON64 2
 #define TEXTON32 1
 
-void gpb(const unsigned int* in_image,unsigned int width, unsigned int height, float* out_image)
+void transpose(int width, int height, float* input, float* output) {
+  for(int row = 0; row < height; row++) {
+    for(int col = 0; col < width; col++) {
+      output[col * height + row] = input[row * width + col];
+    }
+  }                                         
+}
+
+void gpb(const unsigned int* in_image,unsigned int width, unsigned int height, float* borders,int* textons, float* orientations)
 {
 	cuInit(0);
 	cudaSetDevice(1);
@@ -53,6 +61,8 @@ void gpb(const unsigned int* in_image,unsigned int width, unsigned int height, f
 
 	int* devTextons;
 	findTextons(width, height, devGreyscale, &devTextons, nTextonChoice);
+	//int* hostTextons = (int*)malloc(sizeof(int)*width*height); 
+	cudaMemcpy(textons, devTextons, sizeof(int)*width*height, cudaMemcpyDeviceToHost); 
 
 
 	float* devL;
@@ -62,8 +72,6 @@ void gpb(const unsigned int* in_image,unsigned int width, unsigned int height, f
 	normalizeLab(width, height, devL, devA, devB);
 
 	int border = 30;
-	int borderWidth = width + 2 * border;
-	int borderHeight = height + 2 * border;
 	float* devLMirrored;
 	mirrorImage(width, height, border, devL, &devLMirrored);
 	cudaThreadSynchronize();
@@ -118,7 +126,6 @@ void gpb(const unsigned int* in_image,unsigned int width, unsigned int height, f
 	CUDA_SAFE_CALL(cudaMalloc((void**)&devGPb, sizeof(float) * nPixels));
 	float* devGPball = 0;
 	CUDA_SAFE_CALL(cudaMalloc((void**)&devGPball, sizeof(float) * matrixPitchInFloats * 8));
-	//StartCalcGPb(nPixels, matrixPitchInFloats, 8, devbg1, devbg2, devbg3, devcga1, devcga2, devcga3, devcgb1, devcgb2, devcgb3, devtg1, devtg2, devtg3, devSPb, devMPb, devGPball, devGPb);
 	StartCalcGPb(nPixels, matrixPitchInFloats, 8, devCombinedGradient, devSPb, devMPb, devGPball, devGPb);
 	float* devGPb_thin = 0;
 	CUDA_SAFE_CALL(cudaMalloc((void**)&devGPb_thin, nPixels * sizeof(float) ));
@@ -130,7 +137,7 @@ void gpb(const unsigned int* in_image,unsigned int width, unsigned int height, f
 	/*float* hostGPb = (float*)malloc(sizeof(float)*nPixels);*/
 	/*memset(hostGPb, 0, sizeof(float) * nPixels);*/
 	std::cout << "nPixels: " << nPixels << std::endl;
-	cudaMemcpy(out_image, devGPb, sizeof(float)*nPixels, cudaMemcpyDeviceToHost); //TODO: put in again
+	cudaMemcpy(borders, devGPb, sizeof(float)*nPixels, cudaMemcpyDeviceToHost); //TODO: put in again
 	/*cudaMemcpy(out_image, devGreyscale, sizeof(float)*nPixels, cudaMemcpyDeviceToHost);*/
 	//cutSavePGMf(outputPGMfilename, hostGPb, width, height);
 	//writeFile(outputPBfilename, width, height, hostGPb);
@@ -145,22 +152,28 @@ void gpb(const unsigned int* in_image,unsigned int width, unsigned int height, f
 	//free(hostGPb_thin);
 	/* end thin image */
 
-	//float* hostGPbAll = (float*)malloc(sizeof(float) * matrixPitchInFloats * 8);
-	//cudaMemcpy(hostGPbAll, devGPball, sizeof(float) * matrixPitchInFloats * 8, cudaMemcpyDeviceToHost);
-	//int oriMap[] = {3, 2, 1, 0, 7, 6, 5, 4};
-	//float* hostGPbAllConcat = (float*)malloc(sizeof(float) * width * height * 8);
-	//for(int i = 0; i < 8; i++) {
-	//transpose(width, height, hostGPbAll + matrixPitchInFloats * oriMap[i], hostGPbAllConcat + width * height * i);
-	//}
-	//int dim[3];
-	//dim[0] = 8;
-	//dim[1] = width;
-	//dim[2] = height;
-
-	//writeArray(outputgpbAllfilename, 3, dim, hostGPbAllConcat);
-
+  float* hostGPbAll = (float*)malloc(sizeof(float) * matrixPitchInFloats * 8);
+  cudaMemcpy(hostGPbAll, devGPball, sizeof(float) * matrixPitchInFloats * 8, cudaMemcpyDeviceToHost);
+  //int oriMap[] = {0, 1, 2, 3, 4, 5, 6, 7};
+  //int oriMap[] = {4, 5, 6, 7, 0, 1, 2, 3};
+  int oriMap[] = {3, 2, 1, 0, 7, 6, 5, 4};
+  for(int i = 0; i < 8; i++) {
+    transpose(width, height, hostGPbAll + matrixPitchInFloats * oriMap[i], orientations + width * height * i);
+  }
+  //int dim[3];
+  //dim[0] = 8; 
+  //dim[1] = width;
+  //dim[2] = height;
+  //writeArray(outputgpbAllfilename, 3, dim, hostGPbAllConcat);
+  
+  
+  //for(int orientation = 0; orientation < 8; orientation++) {
+	//sprintf(nIndicator, "_%i_Pb.pgm", orientation);
+	//cutSavePGMf("orientation.pgm", hostGPbAll + matrixPitchInFloats * orientation, width, height);
+  //}
+  
 	/*free(hostGPb);*/
-	//free(hostGPbAll);
+	free(hostGPbAll);
 	//free(hostGPbAllConcat);
 
 

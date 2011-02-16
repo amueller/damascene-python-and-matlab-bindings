@@ -7,4 +7,4 @@
  *
  */
 
-void gpb(const unsigned int* in_image,unsigned int width,unsigned int height, float* out_image);
+void gpb(const unsigned int* in_image,unsigned int width,unsigned int height, float* border, int* textons, float* orientations);
