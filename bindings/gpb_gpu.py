@@ -17,9 +17,6 @@ def gpb(image):
     output=np.zeros([height,width],np.float32)
     padded_image=np.zeros([height,width,4],np.uint8)
     padded_image[:,:,:3]=image.astype(np.uint8)
-    import matplotlib.pyplot as plt
-    import ipdb
-    ipdb.set_trace()
     code="""
          gpb((unsigned int*)&padded_image(0,0),width,height,&output(0,0));
          """
@@ -33,8 +30,6 @@ if __name__ == "__main__":
     image=Image.open('../damascene/polynesia.ppm')
     data=np.array(image.getdata()).reshape(image.size[1],image.size[0],3)
     borders=gpb(data);
-    import ipdb
-    ipdb.set_trace()
 
     plt.matshow(borders)
     plt.show()
