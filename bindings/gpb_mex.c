@@ -33,8 +33,8 @@ if (!mxIsClass(pIn[0],"uint8") || mxGetNumberOfDimensions(pIn[0]) != 3) {
   pOut[2]=mxCreateNumericArray(3,orientation_dims,mxSINGLE_CLASS,mxREAL);
 
   borders=(float*) mxGetPr(pOut[0]);
-  orientations=(float*) mxGetPr(pOut[1]);
-  textons=(int*) mxGetPr(pOut[2]);
+  textons=(int*) mxGetPr(pOut[1]);
+  orientations=(float*) mxGetPr(pOut[2]);
 
   in_image = (unsigned int*) mxGetData(pIn[0]);
   gpb(in_image,height,width,borders,textons,orientations); 
