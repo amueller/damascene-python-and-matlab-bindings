@@ -1,2 +1,0 @@
-%mex gpb.o ../obj/release/localcues.cu_o ../obj/release/Stencil.cpp_o ../obj/release/lanczos.cu_o ../obj/release/spectralPb.cu_o ../obj/release/filters.cpp_o ../obj/release/convert.cu_o ../obj/release/texton.cu_o gpb_mex.c -L /usr/local/src/NVIDIA_GPU_Computing_SDK/C/lib -L/usr/lib/nvidia-current/ -L/usr/local/cuda/lib  -lcuda -lcudart -lcublas -lblas -lcutil
-mex -v gpb_mex.c -L../lib/ -ldamascene

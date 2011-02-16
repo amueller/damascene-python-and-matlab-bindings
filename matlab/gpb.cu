@@ -27,36 +27,40 @@
 #include "globalPb.h"
 #include "skeleton.h"
 
+#include <iostream>
 #define TEXTON64 2
 #define TEXTON32 1
 
-void gpb(const unsigned int* in_image,int width, int height, unsigned int* out_image)
+void gpb(const unsigned int* in_image,unsigned int width, unsigned int height, float* out_image)
+/*int main()*/
 {
+	cuInit(0);
+	cudaSetDevice(1);
+
+	uint* devRgbU;
+	/*//copy in_image to device:*/
+	uint nPixels = width * height;
+	cudaMalloc((void**)&devRgbU, nPixels*sizeof(uint));
 	unsigned int totalMemory, availableMemory;
 	cuMemGetInfo(&availableMemory,&totalMemory );
-	printf("Available %u bytes on GPU\n", availableMemory);
-
-	//copy in_image to device:
-	uint imageSize = sizeof(uint) * width * height;
-	uint* devRgbU=NULL;
-	cudaMalloc((void**)devRgbU, imageSize);
-	cudaMemcpy(devRgbU, in_image, imageSize, cudaMemcpyHostToDevice);
+	std::cout<<"Available " << availableMemory << "out of "<< totalMemory<<  " bytes on GPU" <<std::endl;
+	cudaMemcpy(devRgbU, in_image, nPixels*sizeof(uint), cudaMemcpyHostToDevice);
 
 	float* devGreyscale;
 	rgbUtoGreyF(width, height, devRgbU, &devGreyscale);
 
-	int nEigNum = 9;
-	float fEigTolerance = 1e-3;
 	int nTextonChoice = TEXTON32;
-	int nPixels = width * height;
 
 	int* devTextons;
 	findTextons(width, height, devGreyscale, &devTextons, nTextonChoice);
+
+
 	float* devL;
 	float* devA;
 	float* devB;
 	rgbUtoLab3F(width, height, 2.5, devRgbU, &devL, &devA, &devB);
 	normalizeLab(width, height, devL, devA, devB);
+
 	int border = 30;
 	int borderWidth = width + 2 * border;
 	int borderHeight = height + 2 * border;
@@ -65,11 +69,13 @@ void gpb(const unsigned int* in_image,int width, int height, unsigned int* out_i
 	cudaThreadSynchronize();
 	cudaFree(devRgbU);
 	cudaFree(devGreyscale);
+	
 	float* devBg;
 	float* devCga;
 	float* devCgb;
 	float* devTg;
 	int matrixPitchInFloats;
+
 	localCues(width, height, devL, devA, devB, devTextons, &devBg, &devCga, &devCgb, &devTg, &matrixPitchInFloats, nTextonChoice);
 	cudaFree(devTextons);
 	cudaFree(devL);
@@ -99,6 +105,8 @@ void gpb(const unsigned int* in_image,int width, int height, unsigned int* out_i
 	float* eigenvalues;
 	float* devEigenvectors;
 	//int nEigNum = 17;
+	int nEigNum = 9;
+	float fEigTolerance = 1e-3;
 	generalizedEigensolve(theStencil, devMatrix, matrixPitchInFloats, nEigNum, &eigenvalues, &devEigenvectors, fEigTolerance);
 	float* devSPb = 0;
 	size_t devSPb_pitch = 0;
@@ -119,17 +127,19 @@ void gpb(const unsigned int* in_image,int width, int height, unsigned int* out_i
 
 	cudaThreadSynchronize();
 	printf("CUDA Status : %s\n", cudaGetErrorString(cudaGetLastError()));
-	float* hostGPb = (float*)malloc(sizeof(float)*nPixels);
-	memset(hostGPb, 0, sizeof(float) * nPixels);
-	cudaMemcpy(out_image, devGPb, sizeof(float)*nPixels, cudaMemcpyDeviceToHost);
-
+	/*float* hostGPb = (float*)malloc(sizeof(float)*nPixels);*/
+	/*memset(hostGPb, 0, sizeof(float) * nPixels);*/
+	std::cout << "nPixels: " << nPixels << std::endl;
+	cudaMemcpy(out_image, devGPb, sizeof(float)*nPixels, cudaMemcpyDeviceToHost); //TODO: put in again
+	/*cudaMemcpy(out_image, devGreyscale, sizeof(float)*nPixels, cudaMemcpyDeviceToHost);*/
 	//cutSavePGMf(outputPGMfilename, hostGPb, width, height);
 	//writeFile(outputPBfilename, width, height, hostGPb);
 
 	/* thin image */
 	//float* hostGPb_thin = (float*)malloc(sizeof(float)*nPixels);
 	//memset(hostGPb_thin, 0, sizeof(float) * nPixels);
-	//cudaMemcpy(hostGPb_thin, devGPb_thin, sizeof(float)*nPixels, cudaMemcpyDeviceToHost);
+	/*cudaMemcpy(hostGPb_thin, devGPb_thin, sizeof(float)*nPixels, cudaMemcpyDeviceToHost);*/
+
 	//cutSavePGMf(outputthinPGMfilename, hostGPb_thin, width, height);
 	//writeFile(outputthinPBfilename, width, height, hostGPb);
 	//free(hostGPb_thin);
@@ -143,22 +153,27 @@ void gpb(const unsigned int* in_image,int width, int height, unsigned int* out_i
 	//transpose(width, height, hostGPbAll + matrixPitchInFloats * oriMap[i], hostGPbAllConcat + width * height * i);
 	//}
 	//int dim[3];
-	//dim[0] = 8; 
+	//dim[0] = 8;
 	//dim[1] = width;
 	//dim[2] = height;
 
 	//writeArray(outputgpbAllfilename, 3, dim, hostGPbAllConcat);
 
-	free(hostGPb);
+	/*free(hostGPb);*/
 	//free(hostGPbAll);
 	//free(hostGPbAllConcat);
 
 
-	CUDA_SAFE_CALL(cudaFree(devEigenvectors));
-	CUDA_SAFE_CALL(cudaFree(devCombinedGradient));
-	CUDA_SAFE_CALL(cudaFree(devSPb));
-	CUDA_SAFE_CALL(cudaFree(devGPb));
-	CUDA_SAFE_CALL(cudaFree(devGPb_thin));
-	CUDA_SAFE_CALL(cudaFree(devGPball));
-
+	/*CUDA_SAFE_CALL(cudaFree(devEigenvectors));*/
+	/*CUDA_SAFE_CALL(cudaFree(devCombinedGradient));*/
+	/*CUDA_SAFE_CALL(cudaFree(devSPb));*/
+	/*CUDA_SAFE_CALL(cudaFree(devGPb));*/
+	/*CUDA_SAFE_CALL(cudaFree(devGPb_thin));*/
+	/*CUDA_SAFE_CALL(cudaFree(devGPball));*/
 }
+
+int main(){
+
+	return 0;
+}
+
