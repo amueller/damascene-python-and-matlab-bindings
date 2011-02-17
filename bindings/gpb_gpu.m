@@ -11,6 +11,7 @@ function [borders,textons,orientations]=gpb_gpu(image)
     padded(:,:,1:3)=image;
     padded=permute(uint8(padded),[3,2,1]); % interleaved row major
     [borders,textons,orientations]=gpb_mex(padded);
-    borders=borders';
-    textons=textons';
+    borders=uint8(borders'*255);
+    textons=uint8(textons');
+	orientations=uint8(orientations*255);
 end
