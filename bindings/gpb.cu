@@ -57,7 +57,7 @@ void gpb(const unsigned int* in_image,unsigned int width, unsigned int height, f
 	float* devGreyscale;
 	rgbUtoGreyF(width, height, devRgbU, &devGreyscale);
 
-	int nTextonChoice = TEXTON32;
+	int nTextonChoice = TEXTON64;
 
 	int* devTextons;
 	findTextons(width, height, devGreyscale, &devTextons, nTextonChoice);
