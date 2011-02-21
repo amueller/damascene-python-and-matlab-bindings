@@ -183,6 +183,7 @@ void gpb(const unsigned int* in_image,unsigned int width, unsigned int height, f
 	CUDA_SAFE_CALL(cudaFree(devGPb));
 	CUDA_SAFE_CALL(cudaFree(devGPb_thin));
 	CUDA_SAFE_CALL(cudaFree(devGPball));
+	cudaThreadExit();
 }
 
 int main(){
