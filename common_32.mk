@@ -24,7 +24,7 @@ ROOTOBJDIR ?= $(ROOTDIR)/obj
 ROOTSODIR  ?= $(ROOTDIR)/lib
 SODIR      ?= $(ROOTSODIR)/linux
 
-ACMLDIR    ?= /home/local/amueller/acml4.4.0/ifort32
+ACMLDIR    ?= /home/data/amueller/acml4.4.0/ifort32
 
 CUDALIBSUFFIX := lib32
 #LIBDIR := $(CUDA_SDK_PATH)/lib
@@ -32,10 +32,10 @@ LIBDIR := $(ROOTDIR)/lib
 COMMONDIR := $(CUDA_SDK_PATH)/common
 
 # Compilers
-NVCC       := $(CUDA_INSTALL_PATH)/bin/nvcc 
-CXX        := g++
-CC         := gcc
-LINK       := g++
+NVCC       := $(CUDA_INSTALL_PATH)/bin/nvcc --compiler-bindir /home/VI/staff/amueller/bin/
+CXX        := g++-4.2
+CC         := gcc-4.2
+LINK       := g++-4.2
 
 # Includes
 INCLUDES  += -I. -I$(CUDA_INSTALL_PATH)/include -I$(COMMONDIR)/inc -I$(ROOTDIR)/include -I$(ACMLDIR)/include -I../include
@@ -61,7 +61,8 @@ ifeq ($(USEGLLIB),1)
 endif
 
 # Libs
-LIB       := -L$(CUDA_INSTALL_PATH)/$(CUDALIBSUFFIX) -L$(CUDA_SDK_PATH)/lib -L$(LIBDIR) -L$(COMMONDIR)/lib32 -L$(ACMLDIR)/lib -lcuda -lcudart -lcublas -lacml ${OPENGLLIB} -L/usr/lib32/nvidia-current/ -L/usr/lib32
+#LIB       := -L$(CUDA_INSTALL_PATH)/$(CUDALIBSUFFIX) -L$(CUDA_SDK_PATH)/lib -L$(LIBDIR) -L$(COMMONDIR)/lib32 -L$(ACMLDIR)/lib -lcuda -lcudart -lcublas -lacml ${OPENGLLIB} -L/usr/lib32/nvidia-current/ -L/usr/lib32
+LIB       :=  -L/home/VI/staff/amueller/bin/matlab/sys/os/glnx86 -lstdc++ -L$(CUDA_INSTALL_PATH)/$(CUDALIBSUFFIX) -L$(CUDA_SDK_PATH)/lib -L$(LIBDIR) -L$(COMMONDIR)/lib32 -L$(ACMLDIR)/lib -lcuda -lcudart -lcublas -lacml ${OPENGLLIB} -L/usr/lib32/nvidia-current/
 
 # Warning flags
 CXXWARN_FLAGS := \
