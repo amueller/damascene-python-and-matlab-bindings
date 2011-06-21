@@ -123,7 +123,7 @@ void skeletonize(int width, int height, int matrixPitchInFloats, float* devGPb_t
     plut[308] = plut[310] = plut[436]= plut[438] = 1;
     //lut 8
     plut = plut + 512;
-    plut[176] = plut[180] = plut[240] = plut[245] = plut[433] = plut[436] = plut[496] = plut[500] = 1;
+    plut[176] = plut[180] = plut[240] = plut[244] = plut[432] = plut[436] = plut[496] = plut[500] = 1;
 
     CUDA_SAFE_CALL(cudaMemcpyToSymbol(devLut, lutc, NUM_LUTS*512*sizeof(int)));
     
