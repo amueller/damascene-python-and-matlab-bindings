@@ -19,6 +19,7 @@
 #include <time.h>
 #include <math.h>
 #include "cublas.h"
+#include "cutil.h"
 #include <acml.h>
 #include <vector>
 #include "stencilMVM.h"
@@ -392,7 +393,6 @@ void lanczos(int p_nMatrixDimension, dim3 gridDim, dim3 blockDim,
 	float* aAlpha;
 	float* aTEigVals;
 	float* aaTEigVecs;
-	int nIter = 0;
 
 	float* d_aVectorZ = 0;
 	float* d_aVectorQQ = 0;
@@ -462,7 +462,6 @@ void lanczos(int p_nMatrixDimension, dim3 gridDim, dim3 blockDim,
 	int il = 1;
 	int iu = eigCheck;
 	double abstol = 0.0;
-	int m;
 	int nsplit;
 	double* w = (double*)malloc(sizeof(double) * n);
 	int* iblock = (int*)malloc(sizeof(int) * n);
@@ -470,7 +469,6 @@ void lanczos(int p_nMatrixDimension, dim3 gridDim, dim3 blockDim,
 	double* work = (double*)malloc(sizeof(double) * 5 * n);
 	int* iwork = (int*)malloc(sizeof(int) * 3 * n);
 	int* ifail = (int*)malloc(sizeof(int) * eigCheck);
-	int info;
 
 	double* tempAlpha = (double*)malloc(sizeof(double) * n);
 	double* tempBeta = (double*)malloc(sizeof(double) * n);

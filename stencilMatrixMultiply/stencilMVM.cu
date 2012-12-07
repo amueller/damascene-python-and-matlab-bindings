@@ -10,6 +10,7 @@
 
 #include "Stencil.h"
 #include "stencilMVM.h"
+#include "cutil.h"
 
 __constant__ int constOffsets[STENCILAREAMAX];
 

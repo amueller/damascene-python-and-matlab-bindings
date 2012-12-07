@@ -85,14 +85,14 @@ __global__ void normalizeLab_kernel(uint width, uint height, float* devL, float*
 }
 
 
-void loadPPM_rgbU(char* filename, uint* p_width, uint* p_height, uint** p_devRgbU) {
-  unsigned int* data;
-  cutLoadPPM4ub(filename, (unsigned char**)&data, p_width, p_height);
-  //cutLoadPPMub(filename, (unsigned char**)&data, p_width, p_height);
-  uint imageSize = sizeof(uint) * (*p_width) * (*p_height);
-  cudaMalloc((void**)p_devRgbU, imageSize);
-  cudaMemcpy(*p_devRgbU, data, imageSize, cudaMemcpyHostToDevice);
-}
+/*void loadPPM_rgbU(char* filename, uint* p_width, uint* p_height, uint** p_devRgbU) {*/
+  /*unsigned int* data;*/
+  /*cutLoadPPM4ub(filename, (unsigned char**)&data, p_width, p_height);*/
+  /*//cutLoadPPMub(filename, (unsigned char**)&data, p_width, p_height);*/
+  /*uint imageSize = sizeof(uint) * (*p_width) * (*p_height);*/
+  /*cudaMalloc((void**)p_devRgbU, imageSize);*/
+  /*cudaMemcpy(*p_devRgbU, data, imageSize, cudaMemcpyHostToDevice);*/
+/*}*/
 
 void rgbUtoLab3F(uint width, uint height, float gamma, uint* devRgbU, float** p_devL, float** p_devA, float** p_devB) {
   dim3 gridDim = dim3((width - 1)/XBLOCK + 1, (height - 1)/YBLOCK + 1);

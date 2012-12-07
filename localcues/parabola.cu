@@ -15,7 +15,7 @@ __constant__ float const_parabola_filters[MAX_FILTER_LENGTH*MAX_FILTER_LENGTH*MA
 
 float* cuda_parabola_trace;
 
-#include <parabola_kernel.cu>
+#include "parabola_kernel.cu"
 
 static inline void cuda_parabola_allocate(int norients, int width, int height, int border)
 {

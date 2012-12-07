@@ -69,7 +69,6 @@ void spectralPb(float *eigenvalues, float *eigenvectors, int xdim, int ydim, int
 	float *h_Kernels;
 	cudaArray *a_Data;
 	float *d_Result;
-	char fname[80];	
 	int fd,val;
 	int ts1, ts2;
 	
@@ -130,9 +129,8 @@ void spectralPb(float *eigenvalues, float *eigenvectors, int xdim, int ydim, int
         CUDA_SAFE_CALL( cudaThreadSynchronize() );
 //        CUT_SAFE_CALL( cutResetTimer(hTimer) );
 //        CUT_SAFE_CALL( cutStartTimer(hTimer) );
-		  spectralPb_kernel<<<blockGrid, threadBlock>>>(d_Result, xdim_mirrored, ydim_mirrored, 1/sqrt(eigenvalues[i]));
-        CUT_CHECK_ERROR("spectralPb_kernel execution failed\n");
-        CUDA_SAFE_CALL( cudaThreadSynchronize() );
+		spectralPb_kernel<<<blockGrid, threadBlock>>>(d_Result, xdim_mirrored, ydim_mirrored, 1/sqrt(eigenvalues[i]));
+        CUDA_SAFE_CALL(cudaThreadSynchronize() );
 //        CUT_SAFE_CALL( cutStopTimer(hTimer) );
 //        gpuTime = cutGetTimerValue(hTimer);
 //    printf("...convolutionTex2D() time: %f msecs; //%f Mpix/s\n", gpuTime, xdim * ydim * 1e-6 / (0.001 * gpuTime));

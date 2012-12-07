@@ -757,7 +757,6 @@ void spectralPb(float *eigenvalues, float *devEigVec, int xdim, int ydim, int nv
 				
         CUDA_SAFE_CALL( cudaThreadSynchronize() );
 		  spectralPb_kernel<<<blockGrid, threadBlock>>>(d_Result, xdim_mirrored, ydim_mirrored, 1/sqrt(eigenvalues[i]));
-        CUT_CHECK_ERROR("spectralPb_kernel execution failed\n");
         CUDA_SAFE_CALL( cudaThreadSynchronize() );
 	}
 	
