@@ -36,17 +36,17 @@ SET(DAMASCENE_SRC
     localcues/rotate.cu
     nonmax/nonmax.cu
     noReorthog/lanczos.cu
-    noReorthog/spectralPb.cu
+    #noReorthog/spectralPb.cu
     #noReorthog/spectralPb_kernel.cu
     postprocess/skeleton.cu
     sPb/spectralPb.cu
     stencilMatrixMultiply/stencilMVM.cu
     #textons/kmeans.64.cu
     textons/kmeans.cu
-    textons/kmeans_noatomics.cu
+    #textons/kmeans_noatomics.cu
     #textons/texton.64.cu
     textons/texton.cu
-    textons/textonFilter.cu
+    #textons/textonFilter.cu
     #stencilMatrixMultiply/load_smatrix.cpp
     stencilMatrixMultiply/Stencil.cpp
     textons/filters.cpp
@@ -55,4 +55,4 @@ SET(DAMASCENE_SRC
 
 CUDA_ADD_LIBRARY(damascene SHARED ${DAMASCENE_SRC})
 CUDA_ADD_CUBLAS_TO_TARGET(damascene)
-TARGET_LINK_LIBRARIES(damascene ${CUDA_LIBRARIES})
+TARGET_LINK_LIBRARIES(damascene ${CUDA_LIBRARIES} acml)
