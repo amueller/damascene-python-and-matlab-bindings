@@ -299,29 +299,3 @@ void localCues(int width, int height, float* devL, float* devA, float* devB, int
   printf("Completed Local cues\n");
 }
 
-/* int main(int argc, char** argv) */
-/* { */
-/*     norients = 8; */
-/*     nbins = 25; */
-
-/*     file = "data/L.dat"; */
-/*     read_dims(); */
-/*     read_parabola_filters(); */
-
-/*     gpu_gradient_init(norients, width, height, border); */
-/*     gpu_parabola_init(norients, width, height, border); */
-
-/*     int ts1, ts2; */
-
-/*     ts1 = timestamp(); */
-/*     bg(); */
-/*     cga(); */
-/*     cgb(); */
-/*     tg(); */
-/*     ts2 = timestamp(); */
-
-/*     printf("gpu_time = %fms\n", ((double)ts2-(double)ts1)/1000); */
-
-/*     gpu_gradient_cleanup(); */
-/*     gpu_parabola_cleanup(); */
-/* } */
