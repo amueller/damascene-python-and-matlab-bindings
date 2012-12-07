@@ -5,10 +5,10 @@ np.import_array()
 
 cdef extern from "gpb.h":
     cdef void gpb(unsigned int* in_image,unsigned int width, unsigned int
-             height, float* borders, int* textons, float* orientations)
+             height, float* borders, int* textons, float* orientations, int device_num)
 
 
-def damascene(image):
+def damascene(image, int device_num=0):
     if (image.shape[2] != 3):
         raise ValueError("Image needs to have 3 channels.")
     cdef int height = image.shape[0]
@@ -19,5 +19,5 @@ def damascene(image):
     cdef np.ndarray[np.uint8_t, ndim=3] padded_image = np.zeros([height, width, 4], np.uint8)
     padded_image[:, :, :3] = image.astype(np.uint8)
     gpb(<unsigned int*>padded_image.data, width ,height, <float*>borders.data,
-        <int*>textons.data, <float*>orientations.data);
+        <int*>textons.data, <float*>orientations.data, device_num);
     return borders, textons, orientations

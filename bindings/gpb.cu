@@ -40,10 +40,10 @@ void transpose(int width, int height, float* input, float* output) {
   }                                         
 }
 
-void gpb(const unsigned int* in_image,unsigned int width, unsigned int height, float* borders,int* textons, float* orientations)
+void gpb(const unsigned int* in_image,unsigned int width, unsigned int height, float* borders,int* textons, float* orientations, int device_num )
 {
 	cuInit(0);
-	cudaSetDevice(1);
+	cudaSetDevice(device_num);
 
 	uint* devRgbU;
 	/*//copy in_image to device:*/
