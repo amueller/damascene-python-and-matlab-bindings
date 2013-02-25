@@ -3,6 +3,7 @@
 #include <math.h>
 #include <cuda.h>
 #include <assert.h>
+#include <stdexcept>
 
 #define IMUL(a, b)  __mul24(a, b)
 #define M_PIl           3.1415926535897932384626433832795029L  /* pi */
@@ -10,6 +11,7 @@
 #define M_PI_4l         0.7853981633974483096156608458198757L  /* pi/4 */
 #define MAXLENGTH 4000
 #define MAXKERNEL 64
+#define MAXKERNELRADIUS 16
 __constant__ int baseLineX[MAXLENGTH];
 __constant__ int baseLineY[MAXLENGTH];
 __constant__ int guideLineX[MAXLENGTH];
@@ -29,6 +31,11 @@ int hostGuideLineY[MAXLENGTH];
 void precompute_gaussian(float sigma, int& kernel_radius, int& kernel_length, float** p_kernel)
 {
   kernel_radius = (int)ceil(sigma*3);
+
+  if(kernel_radius > MAXKERNELRADIUS) {
+    throw std::runtime_error(std::string("kernel_radius is larger than MAXKERNELRADIUS (increase in rotate.cu)"));
+  }
+
 	kernel_length = 2*kernel_radius + 1;
 
 	*p_kernel = (float*)malloc(kernel_length*sizeof(float));
@@ -264,7 +271,7 @@ template<int nthreads, int nbins, bool blur, bool sense>
   __global__ void computeGradient(int width, int height, int nPixels, int border, int rotatedWidth, float aNorm, float bNorm, int kernelRadius, int kernelLength, int* devIntegrals, int integralImagePitch, float* devGradientA) {
   __shared__ float aHistogram[nthreads*UNROLL];
   __shared__ float bHistogram[nthreads*UNROLL];
-  __shared__ float temp[nthreads*UNROLL];
+  __shared__ float temp[nthreads*UNROLL + MAXKERNELRADIUS];
  
   
   int x = blockIdx.x;
