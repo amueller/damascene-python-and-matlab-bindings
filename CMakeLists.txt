@@ -55,4 +55,9 @@ SET(DAMASCENE_SRC
 
 CUDA_ADD_LIBRARY(damascene SHARED ${DAMASCENE_SRC})
 CUDA_ADD_CUBLAS_TO_TARGET(damascene)
-TARGET_LINK_LIBRARIES(damascene ${CUDA_LIBRARIES} acml)
+TARGET_LINK_LIBRARIES(damascene ${CUDA_LIBRARIES} cuda acml)
+
+if (UNIX)
+    install(TARGETS damascene DESTINATION lib/${OUTPUT_NAME})
+    install(CODE "execute_process(COMMAND ldconfig)")
+endif()
