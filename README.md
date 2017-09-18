@@ -49,7 +49,7 @@ sudo ldconfig
 
 ### Run cmake and install libdamascene
 
-Start from the root of the checked out directory
+Start from the root of the checked out directory.
 
 ```
 mkdir build
@@ -61,6 +61,7 @@ sudo make install
 
 
 ### Build and install the python bindings
+
 Start from the root of the checked out directory
 
 ```
@@ -71,6 +72,7 @@ sudo python setup.py install
 ```
 
 ### ...start GPU segmenting
+
 ```
 sudo apt-get install python-imaging
 sudo apt-get install python-tk
