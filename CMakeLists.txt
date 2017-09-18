@@ -2,13 +2,14 @@ cmake_minimum_required( VERSION 2.6 FATAL_ERROR )
 
 PROJECT(damascene Fortran CXX C)
 
-FIND_PACKAGE(CUDA)
+FIND_PACKAGE(CUDA REQUIRED)
+
 SET(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/CMakeModules)
 
 CUDA_INCLUDE_DIRECTORIES( ${CUDA_SDK_ROOT_DIR}/common/inc ${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(      ${CUDA_SDK_ROOT_DIR}/common/inc ${CUDA_INCLUDE_DIRS}       )
 INCLUDE_DIRECTORIES(      ${CMAKE_SOURCE_DIR}/include                                )
-CUDA_INCLUDE_DIRECTORIES(      ${CMAKE_SOURCE_DIR}/include                                )
+CUDA_INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/include                                )
 
 INCLUDE_DIRECTORIES(/home/VI/staff/amueller/local/acml4.4.0/ifort64/include)  # I'm sorry ;)
 LINK_Directories(/home/VI/staff/amueller/local/acml4.4.0/ifort64/lib)  # I'm sorry ;)
