@@ -1,0 +1,4 @@
+build/
+bindings/build
+bindings/damascene.cpp
+temp/
