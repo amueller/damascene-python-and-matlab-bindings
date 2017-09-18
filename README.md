@@ -13,7 +13,7 @@ Basic install task list on ubuntu 16.04:
 
 ### Install CUDA
 
-This assumes you have installed the proprietary nvidia drivers for ubuntu.  (although I think the cuda install process may take care of that)
+This assumes you have installed the proprietary nvidia drivers for ubuntu.  (although I think the cuda install process may take care of that).
 
 ```
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_8.0.61-1_amd64.deb
@@ -21,6 +21,10 @@ sudo dpkg -i cuda-repo-ubuntu1604_8.0.61-1_amd64.deb
 sudo apt-get update
 sudo sudo apt-get install cuda
 ```
+
+The above download link is for cuda 8.0 on ubuntu 16.04.
+Other versions are available here: https://developer.nvidia.com/cuda-downloads
+
 
 ### Install gcc-5
 ```
