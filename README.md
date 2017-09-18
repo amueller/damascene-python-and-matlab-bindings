@@ -31,6 +31,9 @@ Other versions are available here: https://developer.nvidia.com/cuda-downloads
 sudo apt-get install gcc-5 g++-5
 ```
 
+Note. Ubuntu 16.04 installs gcc-6 as its default gcc compiler.  Cuda 8.0 requires that a max version of 5 is used.  Later in the process we will set an environment variable to instruct cmake is use gcc-5
+
+
 ### Install ACML
 
 Download from here http://developer.amd.com/tools-and-sdks/archive/acml-downloads-resources/#download
