@@ -11,8 +11,18 @@ INCLUDE_DIRECTORIES(      ${CUDA_SDK_ROOT_DIR}/common/inc ${CUDA_INCLUDE_DIRS}  
 INCLUDE_DIRECTORIES(      ${CMAKE_SOURCE_DIR}/include                                )
 CUDA_INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/include                                )
 
-INCLUDE_DIRECTORIES(/home/VI/staff/amueller/local/acml4.4.0/ifort64/include)  # I'm sorry ;)
-LINK_Directories(/home/VI/staff/amueller/local/acml4.4.0/ifort64/lib)  # I'm sorry ;)
+SET(USERACMLPATH "${ACMLPATH}")
+FILE(TO_CMAKE_PATH ${USERACMLPATH} USERACMLPATH)
+
+IF(NOT EXISTS "${USERACMLPATH}/gfortran64/include/acml.h")
+    MESSAGE(SEND_ERROR "Can't find acml.h in ${USERACMLPATH}/gfortran64/include/")
+ELSE()
+    MESSAGE(STATUS "Using ACML from path: " ${USERACMLPATH})
+ENDIF()
+
+
+INCLUDE_DIRECTORIES(${ACMLPATH}gfortran64/include)
+LINK_Directories(${ACMLPATH}gfortran64/lib)
 
 
 SET(CUDA_ARCHITECTURE "-arch=sm_20" CACHE STRING "The CUDA architecture to compile for, i.e. -arch=sm_20")
