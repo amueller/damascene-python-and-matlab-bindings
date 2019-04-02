@@ -6,7 +6,7 @@ Basic install task list on ubuntu 16.04:
 
  * Install cuda 8.0
  * Install gcc-5
- * Install ACML
+ * Install Lapack
  * Run cmake and build libdamascene.so
  * Build the python bindings
  * ... start GPU segmenting
@@ -34,17 +34,10 @@ sudo apt-get install gcc-5 g++-5
 Note. Ubuntu 16.04 installs gcc-6 as its default gcc compiler.  Cuda 8.0 requires that a max version of 5 is used.  Later in the process we will set an environment variable to instruct cmake is use gcc-5
 
 
-### Install ACML
-
-Download from here http://developer.amd.com/tools-and-sdks/archive/acml-downloads-resources/#download
-
-The installer is somewhat interactive.  Select ```/usr/local/acml``` as your install directory
+### Install Lapack
 
 ```
-tar -zxf acml-5-3-1-gfortran-64bit.tgz
-sudo ./install-acml-5-3-1-gfortran-64bit.sh
-sudo echo '/usr/local/acml/gfortran64/lib' > /etc/ld.so.conf.d/acml.conf
-sudo ldconfig
+sudo apt-get install liblapack-dev
 ```
 
 ### Run cmake and install libdamascene

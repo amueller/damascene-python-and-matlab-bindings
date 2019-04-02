@@ -3,6 +3,12 @@ cmake_minimum_required( VERSION 2.6 FATAL_ERROR )
 PROJECT(damascene Fortran CXX C)
 
 FIND_PACKAGE(CUDA REQUIRED)
+find_package(LAPACK REQUIRED)
+
+set(CMAKE_Fortran_FLAGS_RELEASE "${CMAKE_Fortran_FLAGS_RELEASE} -O2")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O2")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")
+set(CUDA_NVCC_FLAGS_RELEASE "${CUDA_NVCC_FLAGS_RELEASE} -O2")
 
 SET(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/CMakeModules)
 
@@ -11,22 +17,17 @@ INCLUDE_DIRECTORIES(      ${CUDA_SDK_ROOT_DIR}/common/inc ${CUDA_INCLUDE_DIRS}  
 INCLUDE_DIRECTORIES(      ${CMAKE_SOURCE_DIR}/include                                )
 CUDA_INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/include                                )
 
-SET(USERACMLPATH "${ACMLPATH}")
-FILE(TO_CMAKE_PATH ${USERACMLPATH} USERACMLPATH)
-
-IF(NOT EXISTS "${USERACMLPATH}/gfortran64/include/acml.h")
-    MESSAGE(SEND_ERROR "Can't find acml.h in ${USERACMLPATH}/gfortran64/include/")
-ELSE()
-    MESSAGE(STATUS "Using ACML from path: " ${USERACMLPATH})
-ENDIF()
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/lapack)
 
 
-INCLUDE_DIRECTORIES(${ACMLPATH}gfortran64/include)
-LINK_Directories(${ACMLPATH}gfortran64/lib)
-
-
-SET(CUDA_ARCHITECTURE "-arch=sm_20" CACHE STRING "The CUDA architecture to compile for, i.e. -arch=sm_20")
-SET(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS};${CUDA_ARCHITECTURE}")
+SET(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} -arch=sm_35
+        -gencode=arch=compute_30,code=sm_30
+        -gencode=arch=compute_35,code=sm_35
+        -gencode=arch=compute_50,code=sm_50
+        -gencode=arch=compute_52,code=sm_52
+        -gencode=arch=compute_60,code=sm_60
+        -gencode=arch=compute_61,code=sm_61
+        -gencode=arch=compute_61,code=compute_61)
 
 
 SET(DAMASCENE_SRC
@@ -66,7 +67,7 @@ SET(DAMASCENE_SRC
 
 CUDA_ADD_LIBRARY(damascene SHARED ${DAMASCENE_SRC})
 CUDA_ADD_CUBLAS_TO_TARGET(damascene)
-TARGET_LINK_LIBRARIES(damascene ${CUDA_LIBRARIES} cuda acml)
+TARGET_LINK_LIBRARIES(damascene ${CUDA_LIBRARIES} cuda ${LAPACK_LIBRARIES})
 
 if (UNIX)
     install(TARGETS damascene DESTINATION lib/${OUTPUT_NAME})

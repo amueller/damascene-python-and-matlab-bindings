@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <complex>
-//#include "filters.h"
+//#lapack "filters.h"
 #include <assert.h>
 #include <cstdlib>
 using namespace std;

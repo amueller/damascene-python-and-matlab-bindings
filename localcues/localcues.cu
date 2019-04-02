@@ -4,12 +4,12 @@
 #include <unistd.h>
 #include <math.h>
 #include <string.h>
-#include <acml.h>
 
 #include "spec.h"
 #include "gradient.h"
 #include "convert.h"
 #include "stencilMVM.h"
+#include <lapacke.h>
 
 #define TEXTON32 1
 #define TEXTON64 2
@@ -70,8 +70,9 @@ void savgol_filter(float* filt, int d, float inra, float inrb, float theta)
     int info;
     int* ipiv = new int[d+1];
     float* work=new float[d+1];
-    sgetrf(d+1, d+1, A, d+1, ipiv, &info);
-    sgetri(d+1, A, d+1, ipiv, &info);
+    int d1 = d+1;
+    LAPACK_sgetrf(&d1, &d1, A, &d1, ipiv, &info);
+	LAPACK_sgetri(&d1, A, &d1, ipiv, work, &d1, &info);
 
     for(int u=-wr;u<=wr;u++)
     {
